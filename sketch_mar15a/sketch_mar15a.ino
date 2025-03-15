@@ -1,44 +1,35 @@
 #define motor1A 13
-#define motor2A 14
+#define motor2A 12
 #define motor1B 33
 #define motor2B 32
 
 
-// PWM settings
-const int freq = 500; // PWM frequency: 500 Hz
-const int resolution = 8; // PWM resolution: 8 bits
 
 
+// the setup function runs once when you press reset or power the board
 void setup() {
-  // Set up PWM
-  ledcAttach(motor1A, freq, resolution);
-  ledcAttach(motor2A, freq, resolution);
-
-  Serial.begin(115200);
+  // initialize digital pin as an output.
+  pinMode(motor1A, OUTPUT);
+  pinMode(motor2A, OUTPUT);  
+  pinMode(motor1B, OUTPUT);
+  pinMode(motor2B, OUTPUT);
 }
 
+// the loop function runs over and over again forever
 void loop() {
-  // Increase speed gradually
-  for (int dutyCycle = 0; dutyCycle <= 255; dutyCycle++) {
-    Serial.println(dutyCycle);
-    ledcWrite(motor1A, dutyCycle);
-    ledcWrite(motor2A, 0);
-    delay(50);
-  }
-
-  delay(2000);
-
-  // Decrease speed gradually
-  for (int dutyCycle = 255; dutyCycle >= 0; dutyCycle--) {
-    Serial.println(dutyCycle);
-    ledcWrite(motor1A, dutyCycle);
-    ledcWrite(motor2A, 0);
-    delay(50);
-  }
   
-  delay(2000);
-}
+  // Rotate
+  forward();
+  delay(2000); 
 
+  // Rotate in the opposite direction
+  backward();
+  delay(2000); 
+
+  // Stop
+  stop();
+  delay(3000);
+}
 
 void forward()
 {
