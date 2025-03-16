@@ -16,8 +16,8 @@
 #include "esp_http_server.h"
 
 // Replace the next variables with your SSID/Password combination
-const char* ssid = "SSID";
-const char* password = "PASSWORD";
+const char* ssid = "CodeHS";
+const char* password = "karelthedog";
 
 #define PART_BOUNDARY "123456789000000000000987654321"
 
@@ -126,7 +126,10 @@ const char* password = "PASSWORD";
   #error "Camera model not selected"
 #endif
 
-#define LED_PIN    14
+#define motor1A 32
+#define motor1B 33
+#define motor2A 12
+#define motor2B 14
 
 static const char* _STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
 static const char* _STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
@@ -288,11 +291,11 @@ static esp_err_t cmd_handler(httpd_req_t *req){
   
   if(!strcmp(variable, "on")) {
     Serial.println("ON");
-    digitalWrite(LED_PIN, 1);
+    //digitalWrite(LED_PIN, 1);
   }
   else if(!strcmp(variable, "off")) {
     Serial.println("OFF");
-    digitalWrite(LED_PIN, 0);
+    //digitalWrite(LED_PIN, 0);
   }
   else {
     res = -1;
@@ -342,7 +345,10 @@ void startCameraServer(){
 void setup() {
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
   
-  pinMode(LED_PIN, OUTPUT);
+  pinMode(motor1A, OUTPUT);
+  pinMode(motor1B, OUTPUT);
+  pinMode(motor2B, OUTPUT);
+  pinMode(motor2A, OUTPUT);
   
   Serial.begin(115200);
   Serial.setDebugOutput(false);
@@ -402,5 +408,64 @@ void setup() {
 }
 
 void loop() {
+  //right();
+  delay(100);
+  stop();
+  delay(1000);
+  // right();
+  // delay(100);
+  // left();
+  // delay(100);
+  // backward();
+  // delay(100);
+  // stop();
+  // delay(1000);
+}
+
+void forward()
+{
+  pinMode(motor1A, HIGH);
+  pinMode(motor1B, LOW);
+  pinMode(motor2A, HIGH);
+  pinMode(motor2B, LOW);
   
 }
+
+void right()
+{
+  pinMode(motor1A, HIGH);
+  pinMode(motor1B, LOW);
+  pinMode(motor2A, LOW);
+  pinMode(motor2B, HIGH);
+  
+}
+
+void left()
+{
+  pinMode(motor1A, LOW);
+  pinMode(motor1B, HIGH);
+  pinMode(motor2A, HIGH);
+  pinMode(motor2B, LOW);
+  
+}
+
+void backward()
+{
+  pinMode(motor1A, LOW);
+  pinMode(motor1B, HIGH);
+  pinMode(motor2A, LOW);
+  pinMode(motor2B, HIGH);
+  
+}
+
+void stop()
+{
+  pinMode(motor1A, LOW);
+  pinMode(motor1B, LOW);
+  pinMode(motor2A, LOW);
+  pinMode(motor2B, LOW);
+  
+}
+
+
+
